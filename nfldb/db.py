@@ -1,5 +1,5 @@
-from __future__ import absolute_import, division, print_function
-import ConfigParser
+
+import configparser
 import datetime
 import os
 import os.path as path
@@ -68,7 +68,7 @@ def config(config_path=''):
         path.join(_config_home, 'nfldb', 'config.ini'),
     ]
     tried = []
-    cp = ConfigParser.RawConfigParser()
+    cp = configparser.RawConfigParser()
     for p in paths:
         tried.append(p)
         try:
@@ -406,19 +406,19 @@ def _upsert(cursor, table, data, pk):
 def _drop_stat_indexes(c):
     from nfldb.types import _play_categories, _player_categories
 
-    for cat in _player_categories.values():
+    for cat in list(_player_categories.values()):
         c.execute('DROP INDEX play_player_in_%s' % cat)
-    for cat in _play_categories.values():
+    for cat in list(_play_categories.values()):
         c.execute('DROP INDEX play_in_%s' % cat)
 
 
 def _create_stat_indexes(c):
     from nfldb.types import _play_categories, _player_categories
 
-    for cat in _player_categories.values():
+    for cat in list(_player_categories.values()):
         c.execute('CREATE INDEX play_player_in_%s ON play_player (%s ASC)'
                   % (cat, cat))
-    for cat in _play_categories.values():
+    for cat in list(_play_categories.values()):
         c.execute('CREATE INDEX play_in_%s ON play (%s ASC)' % (cat, cat))
 
 
@@ -440,7 +440,7 @@ def _migrate(conn, to):
     assert current <= to
 
     globs = globals()
-    for v in xrange(current+1, to+1):
+    for v in range(current+1, to+1):
         fname = '_migrate_%d' % v
         with Tx(conn) as c:
             assert fname in globs, 'Migration function %d not defined.' % v
@@ -669,7 +669,7 @@ def _migrate_2(c):
                 ON DELETE RESTRICT
                 ON UPDATE CASCADE
         )
-    ''' % ', '.join([cat._sql_field for cat in _play_categories.values()]))
+    ''' % ', '.join([cat._sql_field for cat in list(_play_categories.values())]))
 
     c.execute('''
         CREATE TABLE play_player (
@@ -697,7 +697,7 @@ def _migrate_2(c):
                 ON DELETE RESTRICT
                 ON UPDATE CASCADE
         )
-    ''' % ', '.join(cat._sql_field for cat in _player_categories.values()))
+    ''' % ', '.join(cat._sql_field for cat in list(_player_categories.values())))
 
 
 def _migrate_3(c):
@@ -831,10 +831,10 @@ changed.
                 REFERENCES game (gsis_id)
                 ON DELETE CASCADE
         )
-    ''' % ', '.join(cat._sql_field for cat in _player_categories.values()))
+    ''' % ', '.join(cat._sql_field for cat in list(_player_categories.values())))
     select = ['play.gsis_id', 'play.drive_id', 'play.play_id'] \
         + ['COALESCE(SUM(play_player.%s), 0)' % cat.category_id
-           for cat in _player_categories.values()]
+           for cat in list(_player_categories.values())]
     c.execute('''
         INSERT INTO agg_play
         SELECT {select}
@@ -852,7 +852,7 @@ changed.
         CREATE INDEX agg_play_in_gsis_drive_id
             ON agg_play (gsis_id ASC, drive_id ASC);
     ''')
-    for cat in _player_categories.values():
+    for cat in list(_player_categories.values()):
         c.execute('CREATE INDEX agg_play_in_%s ON agg_play (%s ASC)'
                   % (cat, cat))
 
@@ -875,9 +875,9 @@ changed.
 
     def make_sum(field):
         return 'COALESCE(SUM(play_player.{f}), 0) AS {f}'.format(f=field)
-    select = [make_sum(f.category_id) for f in _player_categories.values()]
+    select = [make_sum(f.category_id) for f in list(_player_categories.values())]
     set_columns = ['{f} = s.{f}'.format(f=f.category_id)
-                   for f in _player_categories.values()]
+                   for f in list(_player_categories.values())]
     c.execute('''
         CREATE FUNCTION agg_play_update() RETURNS trigger AS $$
             BEGIN

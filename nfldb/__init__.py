@@ -56,7 +56,7 @@ to
 If you need help, please join us at our IRC channel `#nflgame` on
 FreeNode.
 """
-from __future__ import absolute_import, division, print_function
+
 
 from nfldb.db import __pdoc__ as __db_pdoc__
 from nfldb.db import api_version, connect, now, set_timezone, schema_version

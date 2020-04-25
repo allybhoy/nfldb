@@ -1,4 +1,4 @@
-from __future__ import absolute_import, division, print_function
+
 from collections import defaultdict
 try:
     from collections import OrderedDict
@@ -13,7 +13,7 @@ import nfldb.sql as sql
 import nfldb.types as types
 
 try:
-    strtype = basestring
+    strtype = str
 except NameError:
     strtype = str
 
@@ -59,7 +59,7 @@ def aggregate(objs):
                 summed[pp.player_id] = pp._copy()
             else:
                 summed[pp.player_id]._add(pp)
-    return summed.values()
+    return list(summed.values())
 
 
 def current(db):
@@ -99,7 +99,7 @@ def _entities_by_ids(db, entity, *ids):
     q = Query(db)
     entq = funs['query']
     for pkey in ids:
-        named = dict(zip(entity._sql_tables['primary'], pkey))
+        named = dict(list(zip(entity._sql_tables['primary'], pkey)))
         q.orelse(entq(Query(db), **named))
     return funs['results'](q)
 
@@ -210,7 +210,7 @@ def guess_position(pps):
     counts = defaultdict(int)
     for pp in pps:
         counts[pp.guess_position] += 1
-    return max(counts.items(), key=lambda (_, count): count)[0]
+    return max(list(counts.items()), key=lambda __count: __count[1])[0]
 
 
 def _append_conds(conds, entity, kwargs):
@@ -220,7 +220,7 @@ def _append_conds(conds, entity, kwargs):
     correspond to fields in `entity` are used.
     """
     allowed = set(entity.sql_fields())
-    for k, v in kwargs.items():
+    for k, v in list(kwargs.items()):
         kbare = _no_comp_suffix(k)
         assert kbare in allowed, \
             "The key '%s' does not exist for entity '%s'." \
@@ -328,7 +328,7 @@ class Comparison (Condition):
             '__eq': '=', '__ne': '!=',
             '__lt': '<', '__le': '<=', '__gt': '>', '__ge': '>=',
         }
-        for suffix, op in suffixes.items():
+        for suffix, op in list(suffixes.items()):
             if kw.endswith(suffix):
                 self.operator = op
                 self.column = kw[0:-4]
@@ -665,7 +665,7 @@ class Query (Condition):
         # since their SQL can be generated automatically, but it can be
         # much faster to express them in terms of boolean logic with other
         # fields rather than generate them.
-        for field, value in kw.items():
+        for field, value in list(kw.items()):
             nosuff = _no_comp_suffix(field)
             suff = _comp_suffix(field)
 
@@ -884,7 +884,7 @@ class Query (Condition):
                 for row in cursor.fetchall():
                     pp = init_pp(self._db, row)
                     plays[make_pid(pp)]._play_players.append(pp)
-            return plays.values()
+            return list(plays.values())
 
     def as_play_players(self):
         """
@@ -961,7 +961,7 @@ class Query (Condition):
                     continue
                 joins += types.PlayPlayer._sql_join_to_all(ent)
 
-            sum_fields = types._player_categories.keys() \
+            sum_fields = list(types._player_categories.keys()) \
                 + AggPP._sql_tables['derived']
             select_sum_fields = AggPP._sql_select_fields(sum_fields)
             where = self._sql_where(cur)

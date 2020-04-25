@@ -1,4 +1,4 @@
-from __future__ import absolute_import, division, print_function
+
 
 try:
     from collections import OrderedDict
@@ -428,18 +428,18 @@ play-by-play data. The keys are the category identifier (e.g.,
 """
 
 _play_categories = OrderedDict(
-    [(n, c) for n, c in stat_categories.items()
+    [(n, c) for n, c in list(stat_categories.items())
      if c.category_type is Enums.category_scope.play])
 _player_categories = OrderedDict(
-    [(n, c) for n, c in stat_categories.items()
+    [(n, c) for n, c in list(stat_categories.items())
      if c.category_type is Enums.category_scope.player])
 
 # Don't document these fields because there are too many.
 # Instead, the API docs will include a link to a Wiki page with a table
 # of stat categories.
-for cat in _play_categories.values():
+for cat in list(_play_categories.values()):
     __pdoc__['Play.%s' % cat.category_id] = None
-for cat in _player_categories.values():
+for cat in list(_player_categories.values()):
     __pdoc__['Play.%s' % cat.category_id] = None
     __pdoc__['PlayPlayer.%s' % cat.category_id] = None
 
@@ -644,7 +644,7 @@ class PossessionTime (object):
         formatted as clock time. For example, `2:00` corresponds to
         `120` seconds and `14:39` corresponds to `879` seconds.
         """
-        minutes, seconds = map(int, clock_str.split(':', 1))
+        minutes, seconds = list(map(int, clock_str.split(':', 1)))
         return PossessionTime((minutes * 60) + seconds)
 
     @staticmethod
@@ -762,9 +762,9 @@ class Clock (object):
         """
         assert getattr(Enums.game_phase, phase, None) is not None, \
             '"%s" is not a valid game phase. choose one of %s' \
-            % (phase, map(str, Enums.game_phase))
+            % (phase, list(map(str, Enums.game_phase)))
 
-        minutes, seconds = map(int, clock.split(':', 1))
+        minutes, seconds = list(map(int, clock.split(':', 1)))
         elapsed = Clock._phase_max - ((minutes * 60) + seconds)
         return Clock(Enums.game_phase[phase], int(elapsed))
 
@@ -774,7 +774,7 @@ class Clock (object):
         Casts a SQL string of the form `(game_phase, elapsed)` to a
         `nfldb.Clock` object.
         """
-        phase, elapsed = map(str.strip, sqlv[1:-1].split(','))
+        phase, elapsed = list(map(str.strip, sqlv[1:-1].split(',')))
         return Clock(Enums.game_phase[phase], int(elapsed))
 
     def __init__(self, phase, elapsed):
@@ -1090,7 +1090,7 @@ class SQLPlayPlayer (sql.Entity):
     _sql_tables = {
         'primary': ['gsis_id', 'drive_id', 'play_id', 'player_id'],
         'managed': ['play_player'],
-        'tables': [('play_player', ['team'] + _player_categories.keys())],
+        'tables': [('play_player', ['team'] + list(_player_categories.keys()))],
         'derived': ['offense_yds', 'offense_tds', 'defense_tds', 'points'],
     }
 
@@ -1211,7 +1211,7 @@ class PlayPlayer (SQLPlayPlayer):
         dbpp.play_id = p.play_id
         dbpp.player_id = pp.playerid
         dbpp.team = team
-        for k in _player_categories.keys():
+        for k in list(_player_categories.keys()):
             if pp._stats.get(k, 0) != 0:
                 setattr(dbpp, k, pp._stats[k])
 
@@ -1290,7 +1290,7 @@ class PlayPlayer (SQLPlayPlayer):
         """The set of non-zero statistical fields set."""
         if self._fields is None:
             self._fields = set()
-            for k in _player_categories.keys():
+            for k in list(_player_categories.keys()):
                 if getattr(self, k, 0) != 0:
                     self._fields.add(k)
         return self._fields
@@ -1434,8 +1434,8 @@ class SQLPlay (sql.Entity):
         'tables': [
             ('play', ['time', 'pos_team', 'yardline', 'down', 'yards_to_go',
                       'description', 'note', 'time_inserted', 'time_updated',
-                      ] + _play_categories.keys()),
-            ('agg_play', _player_categories.keys()),
+                      ] + list(_play_categories.keys())),
+            ('agg_play', list(_player_categories.keys())),
         ],
         'derived': ['offense_yds', 'offense_tds', 'defense_tds', 'points',
                     'game_date'],
@@ -1557,7 +1557,7 @@ class Play (SQLPlay):
         dbplay.yards_to_go = p.yards_togo
         dbplay.description = p.desc
         dbplay.note = p.note
-        for k in _play_categories.keys():
+        for k in list(_play_categories.keys()):
             if p._stats.get(k, 0) != 0:
                 setattr(dbplay, k, p._stats[k])
         # Note that `Play` objects also normally contain aggregated

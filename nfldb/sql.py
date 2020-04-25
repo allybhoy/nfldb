@@ -1,4 +1,4 @@
-from __future__ import absolute_import, division, print_function
+
 
 from nfldb.db import _upsert
 
@@ -201,14 +201,13 @@ class Entity (object):
             return f._sql_relation_distance(t)
 
         def relation_dists(froms, tos):
-            return filter(lambda (f, t, d): d is not None,
-                          ((f, t, dist(f, t)) for f in froms for t in tos))
+            return [f_t_d2 for f_t_d2 in ((f, t, dist(f, t)) for f in froms for t in tos) if f_t_d2[2] is not None]
 
         def more_general(froms, tos):
-            return filter(lambda (f, t, d): d < 0, relation_dists(froms, tos))
+            return [f_t_d3 for f_t_d3 in relation_dists(froms, tos) if f_t_d3[2] < 0]
 
         def more_specific(froms, tos):
-            return filter(lambda (f, t, d): d > 0, relation_dists(froms, tos))
+            return [f_t_d4 for f_t_d4 in relation_dists(froms, tos) if f_t_d4[2] > 0]
 
         joins = ''
         froms, tos = set([cls_from]), set(cls_tos)
@@ -224,10 +223,10 @@ class Entity (object):
                 froms.add(t)
                 return f._sql_join_to_all(t)
             if general:
-                f, t, _ = max(general, key=lambda (f, t, d): d)
+                f, t, _ = max(general, key=lambda f_t_d: f_t_d[2])
                 joins += add_join(f, t)
             if specific:
-                f, t, _ = min(specific, key=lambda (f, t, d): d)
+                f, t, _ = min(specific, key=lambda f_t_d1: f_t_d1[2])
                 joins += add_join(f, t)
         return joins
 
