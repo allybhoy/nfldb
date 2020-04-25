@@ -44,7 +44,7 @@ setup(
     description='A library to manage and update NFL data in a relational '
                 'database.',
     long_description=longdesc,
-    url='https://github.com/BurntSushi/nfldb',
+    url='https://github.com/derek-adair/nfldb',
     classifiers=[
         'License :: Public Domain',
         'Development Status :: 3 - Alpha',
@@ -53,8 +53,8 @@ setup(
         'Intended Audience :: End Users/Desktop',
         'Intended Audience :: Other Audience',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Database',
     ],
     platforms='ANY',
