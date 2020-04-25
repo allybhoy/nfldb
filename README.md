@@ -1,4 +1,4 @@
-**THIS PROJECT IS UNMAINTAINED.**
+**THIS PROJECT IS A MAINTAINED FORK OF ANDREW GALANTS [NFLDB](https://github.com/BurntSushi/nfldb)**
 
 nfldb is a relational database bundled with a Python module to quickly and
 conveniently query and update the database with data from active games.
@@ -7,12 +7,6 @@ Data is imported from
 from a JSON feed on NFL.com's live GameCenter pages. This data includes, but is
 not limited to, game schedules, scores, rosters and play-by-play data for every
 preseason, regular season and postseason game dating back to 2009.
-
-It can also
-[be used with nflvid to search for and watch video of
-plays](http://pdoc.burntsushi.net/nflvid.vlc). Please see the
-[nfldb wiki](https://github.com/BurntSushi/nfldb/wiki) for more details on how
-to get that working.
 
 Here is a small teaser that shows how to use nfldb to find the top five passers
 in the 2012 regular season:
@@ -25,7 +19,7 @@ q = nfldb.Query(db)
 
 q.game(season_year=2012, season_type='Regular')
 for pp in q.sort('passing_yds').limit(5).as_aggregate():
-    print pp.player, pp.passing_yds
+    print ( pp.player, pp.passing_yds )
 ```
 
 And the output is:
@@ -42,15 +36,15 @@ Matt Ryan (ATL, QB) 4719
 
 ### Documentation and getting help
 
-nfldb has
-[comprehensive API documentation](http://pdoc.burntsushi.net/nfldb).
+[comprehensive API documentation](http://nfldb.derekadair.com).
 Tutorials, more examples and a description of the data model can be found
-on the [nfldb wiki](https://github.com/BurntSushi/nfldb/wiki).
+on the [nfldb wiki](https://github.com/derek-adair/nfldb/wiki).
 
 If you need any help or have found a bug, please
 [open a new issue on nfldb's issue
-tracker](https://github.com/BurntSushi/nfldb/issues/new)
-or join us at our IRC channel `#nflgame` on FreeNode.
+tracker](https://github.com/derek-adair/nfldb/issues/new)
+
+OR come visit us in discord on channel https://discord.gg/G7uay2.
 
 
 ### Installation and dependencies
@@ -61,12 +55,6 @@ nfldb depends on the following Python packages available in
 [psycopg2](https://pypi.python.org/pypi/psycopg2),
 [pytz](https://pypi.python.org/pypi/pytz) and
 [enum34](https://pypi.python.org/pypi/enum34).
-nfldb also needs PostgreSQL installed with an available empty database.
-
-I've only tested nfldb with Python 2.7 on a Linux system. In theory, nfldb
-should be able to work on Windows and Mac systems as long as you can get
-PostgreSQL running. It is not Python 3 compatible (yet, mostly because of
-the `nflgame` dependency).
 
 Please see the
 [installation guide](https://github.com/BurntSushi/nfldb/wiki/Installation)
@@ -84,7 +72,7 @@ There is also a [full PDF version](http://burntsushi.net/stuff/nfldb/nfldb.pdf)
 that includes every column in the database.
 
 The nfldb wiki has a [description of the data
-model](https://github.com/BurntSushi/nfldb/wiki/The-data-model).
+model](https://github.com/derek-adair/nfldb/wiki/The-data-model).
 
 The most recent version of the nfldb PostgreSQL database is available here:
 [http://burntsushi.net/stuff/nfldb/nfldb.sql.zip](http://burntsushi.net/stuff/nfldb/nfldb.sql.zip).
