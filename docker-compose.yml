@@ -1,0 +1,16 @@
+version: "3.2"
+services:
+    postgres:
+        image: postgres
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+    nfldb:
+        container_name: 'nfldb'
+        build:
+           context: .
+        depends_on:
+            - postgres
+        volumes:
+            - "./config.ini:/virtualenv/share/nfldb/config.ini"
+        command: python
