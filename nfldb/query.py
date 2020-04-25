@@ -1,4 +1,3 @@
-
 from collections import defaultdict
 try:
     from collections import OrderedDict
@@ -17,9 +16,7 @@ try:
 except NameError:
     strtype = str
 
-
 __pdoc__ = {}
-
 
 _ENTITIES = {
     'game': types.Game,
@@ -28,7 +25,6 @@ _ENTITIES = {
     'play_player': types.PlayPlayer,
     'player': types.Player,
 }
-
 
 def aggregate(objs):
     """
@@ -169,9 +165,9 @@ def player_search(db, full_name, team=None, position=None,
     results = []
     with Tx(db) as cursor:
         if team is not None:
-            qteam = cursor.mogrify('team = %s', (team,))
+            qteam = cursor.mogrify('team = %s', (team,)).decode('utf-8')
         if position is not None:
-            qposition = cursor.mogrify('position = %s', (position,))
+            qposition = cursor.mogrify('position = %s', (position,)).decode('utf-8')
 
         fuzzy_filled = cursor.mogrify(fuzzy, (full_name,))
         columns = types.Player._sql_select_fields(types.Player.sql_fields())
@@ -350,12 +346,11 @@ class Comparison (Condition):
         if isinstance(self.value, tuple) or isinstance(self.value, list):
             assert self.operator == '=', \
                 'Disjunctions must use "=" for column "%s"' % field
-            vals = [cursor.mogrify('%s', (v,)) for v in self.value]
+            vals = [cursor.mogrify('%s', (v,).decod('utf-8')) for v in self.value]
             return '%s IN (%s)' % (field, ', '.join(vals))
         else:
             paramed = '%s %s %s' % (field, self.operator, '%s')
-            return cursor.mogrify(paramed, (self.value,))
-
+            return cursor.mogrify(paramed, (self.value,)).decode('utf-8')
 
 def QueryOR(db):
     """
@@ -364,7 +359,6 @@ def QueryOR(db):
     `nfldb.Query(db, orelse=True)`.
     """
     return Query(db, orelse=True)
-
 
 class Query (Condition):
     """
@@ -1029,7 +1023,6 @@ class Query (Condition):
             return Condition._disjunctions(
                 cursor, [self._andalso] + [[c] for c in self._orelse],
                 aliases=aliases, aggregate=aggregate)
-
 
 class Sorter (object):
     """
