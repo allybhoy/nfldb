@@ -438,7 +438,7 @@ class Query (Condition):
 
     This is only the beginning of what can be done. More examples that run
     the gamut can be found on
-    [nfldb's wiki](https://github.com/BurntSushi/nfldb/wiki).
+    [nfldb's wiki](https://github.com/derek-adair/nfldb/wiki).
     """
 
     def __init__(self, db, orelse=False):
@@ -601,7 +601,7 @@ class Query (Condition):
         how to specify search criteria.
 
         Please
-        [open an issue](https://github.com/BurntSushi/nfldb/issues/new)
+        [open an issue](https://github.com/derek-adair/nfldb/issues/new)
         if you can think of other special fields to add.
         """
         if 'team' in kw:
