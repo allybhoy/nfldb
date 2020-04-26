@@ -3,10 +3,12 @@ REMOTE=gopher:~/www/burntsushi.net/stuff/nfldb/
 all:
 	@echo "Specify a target."
 
-pypi: docs er sql longdesc.rst
-	sudo python2 setup.py register sdist bdist_wininst upload
+pypi: docs longdesc.rst
+	rm -rf dist/
+	python setup.py sdist bdist_wheel
+	twine upload dist/*
 
-docs: er
+docs: 
 	pdoc --html --html-dir ./doc --overwrite ./nfldb
 
 er:
