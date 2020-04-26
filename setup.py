@@ -1,5 +1,5 @@
 import codecs
-from distutils.core import setup
+from setuptools import setup
 from glob import glob
 import os.path as path
 
@@ -36,7 +36,7 @@ assert version != '0.0.0'
 docfiles = glob('doc/nfldb/*.html') + glob('doc/*.pdf') + glob('doc/*.png')
 
 setup(
-    name='nfldb',
+    name='nfldb-redux',
     author='Andrew Gallant',
     author_email='nfldb@burntsushi.net',
     version=version,
