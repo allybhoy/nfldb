@@ -74,6 +74,5 @@ that includes every column in the database.
 The nfldb wiki has a [description of the data
 model](https://github.com/derek-adair/nfldb/wiki/The-data-model).
 
-The most recent version of the nfldb PostgreSQL database is available here:
-[http://burntsushi.net/stuff/nfldb/nfldb.sql.zip](http://burntsushi.net/stuff/nfldb/nfldb.sql.zip).
-
+Download the 2019 nfldb PostgreSQL database
+[here](https://github.com/derek-adair/nfldb/releases/download/1.0.0a2/nfldb.sql.zip)
