@@ -228,7 +228,7 @@ def _is_empty(conn):
 
 def _mogrify(cursor, xs):
     """Shortcut for mogrifying a list as if it were a tuple."""
-    return cursor.mogrify('%s', (tuple(xs),))
+    return cursor.mogrify('%s', (tuple(xs),)).decode('utf-8')
 
 
 def _num_rows(cursor, table):
