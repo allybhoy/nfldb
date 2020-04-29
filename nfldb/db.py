@@ -46,9 +46,24 @@ if not _config_home:
 
 def config(config_path=''):
     """
-    Reads and loads the configuration file containing PostgreSQL
-    connection information. This function is used automatically
+    Reads and environment, and loads the configuration file containing 
+    PostgreSQL connection information. This function is used automatically
     by `nfldb.connect`.
+
+    The environment variables override config.ini if both set.  nfldb reads
+    the following;
+
+    * POSTGRES_USER
+
+    * POSTGRES_HOST
+
+    * POSTGRES_DATABASE
+
+    * POSTGRES_PASSWORD
+
+    * POSTGRES_PORT
+
+    * POSTGRES_TIMEZONE
 
     The return value is a tuple. The first value is a dictionary
     mapping a key in the configuration file to its corresponding
@@ -75,16 +90,17 @@ def config(config_path=''):
             with open(p) as fp:
                 cp.readfp(fp)
                 return {
-                    'timezone': cp.get('pgsql', 'timezone'),
-                    'database': cp.get('pgsql', 'database'),
-                    'user': cp.get('pgsql', 'user'),
-                    'password': cp.get('pgsql', 'password'),
-                    'host': cp.get('pgsql', 'host'),
-                    'port': cp.getint('pgsql', 'port'),
+                    'timezone': os.getenv('POSTGRES_TIMEZONE', cp.get('pgsql', 'timezone')),
+                    'database': os.getenv('POSTGRES_DATABASE', cp.get('pgsql', 'database')),
+                    'user': os.getenv('POSTGRES_USER', cp.get('pgsql', 'user')),
+                    'password': os.getenv('POSTGRES_PASSWORD', cp.get('pgsql', 'password')),
+                    'host': os.getenv('POSTGRES_HOST', cp.get('pgsql', 'host')),
+                    'port': os.getenv('POSTGRES_PORT', cp.getint('pgsql', 'port')),
                 }, tried
         except IOError:
             pass
     return None, tried
+
 
 
 def connect(database=None, user=None, password=None, host=None, port=None,
@@ -92,8 +108,8 @@ def connect(database=None, user=None, password=None, host=None, port=None,
     """
     Returns a `psycopg2._psycopg.connection` object from the
     `psycopg2.connect` function. If database is `None`, then `connect`
-    will look for a configuration file using `nfldb.config` with
-    `config_path`. Otherwise, the connection will use the parameters
+    will look for a environment variables and then a configuration file 
+    using `nfldb.config` with `config_path`. Otherwise, the connection will use the parameters
     given.
 
     If `database` is `None` and no config file can be found, then an
@@ -115,7 +131,7 @@ def connect(database=None, user=None, password=None, host=None, port=None,
     if database is None:
         conf, tried = config(config_path=config_path)
         if conf is None:
-            raise IOError("Could not find valid configuration file. "
+            raise IOError("Could not find valid environment variables nor configuration file. "
                           "Tried the following paths: %s" % tried)
 
         timezone, database = conf['timezone'], conf['database']

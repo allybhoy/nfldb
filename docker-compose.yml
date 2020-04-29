@@ -1,7 +1,6 @@
 version: "3.2"
 services:
     postgres:
-        container_name: 'nfldb-postgres'
         image: postgres
         environment:
             - POSTGRES_USER=postgres
@@ -10,8 +9,18 @@ services:
         container_name: 'nfldb'
         build:
            context: .
-        depends_on:
-            - postgres
         volumes:
             - "./:/code"
         command: python
+        depends_on:
+            - postgres
+
+        #env_file: .env-nfldb
+        
+        # nfldb reads the following environment variables:
+        # POSTGRES_USER
+        # POSTGRES_HOST
+        # POSTGRES_DATABASE
+        # POSTGRES_PASSWORD
+        # POSTGRES_PORT
+        # POSTGRES_TIMEZONE
