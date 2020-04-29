@@ -6,5 +6,5 @@ RUN dpkg -i $(pwd)/pandoc-2.9.2.1-1-amd64.deb
 
 WORKDIR /code
 COPY ./ /code
-RUN pip install -e ./
+RUN make dev-install
 COPY ./config.ini.sample /virtualenv/share/nfldb/config.ini
