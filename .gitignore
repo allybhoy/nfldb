@@ -8,3 +8,5 @@ wiki
 build
 *.pyc
 *.egg-info
+.env-nfldb
+config.ini
