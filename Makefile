@@ -36,7 +36,6 @@ docstring: nfldb/__init__.py
 	./scripts/extract-docstring > docstring
 
 dev-install:
-	[[ -n "$$VIRTUAL_ENV" ]] || exit
 	rm -rf ./dist
 	python setup.py sdist
 	pip install -U dist/*.tar.gz

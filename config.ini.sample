@@ -31,14 +31,13 @@ database = nfldb
 # The user should have permission to add, delete and remove data.
 # Also, the user should have permission to create/alter/drop tables,
 # indexes and types.
-user = nfldb
-password = YOUR PASSWORD
+user = postgres
+password = postgres
 
 # The host of the PostgreSQL server. When using a local database, this should
 # be set to "localhost".
-host = localhost
+host = nfldb-postgres
 
 # The port that the PostgreSQL server is running on. It is set to the
 # default port of 5432.
 port = 5432
-
