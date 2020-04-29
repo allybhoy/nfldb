@@ -1,9 +1,9 @@
-**THIS PROJECT IS A MAINTAINED FORK OF ANDREW GALANTS [NFLDB](https://github.com/BurntSushi/nfldb)**
+# A MAINTAINED FORK OF ANDREW GALANTS [NFLDB](https://github.com/BurntSushi/nfldb)
 
 nfldb is a relational database bundled with a Python module to quickly and
 conveniently query and update the database with data from active games.
 Data is imported from
-[nflgame](https://github.com/BurntSushi/nflgame), which in turn gets its data
+[nflgame](https://github.com/derek-adair/nflgame), which in turn gets its data
 from a JSON feed on NFL.com's live GameCenter pages. This data includes, but is
 not limited to, game schedules, scores, rosters and play-by-play data for every
 preseason, regular season and postseason game dating back to 2009.
@@ -57,8 +57,8 @@ nfldb depends on the following Python packages available in
 [enum34](https://pypi.python.org/pypi/enum34).
 
 Please see the
-[installation guide](https://github.com/BurntSushi/nfldb/wiki/Installation)
-on the [nfldb wiki](https://github.com/BurntSushi/nfldb/wiki)
+[installation guide](https://github.com/derek-adair/nfldb/wiki/Installation)
+on the [nfldb wiki](https://github.com/derek-adair/nfldb/wiki)
 for instructions on how to setup nfldb.
 
 
