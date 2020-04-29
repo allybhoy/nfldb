@@ -39,9 +39,10 @@ teams1 = [
 ]
 
 teams2 = [
+    ['JAX', 'Jacksonville', 'Jaguars', 'Jacksonville Jaguars', 'JAC'],
     ['LA', 'Los Angeles', 'Rams', 'Los Angeles Rams', 'L.A.'],
+    ['LAC', 'Los Angeles C', 'Chargers', 'Los Angeles Chargers', 'L.A.C'],
 ]
-
 
 def standard_team(team):
     """
